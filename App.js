@@ -134,6 +134,7 @@ export default function App() {
           placeholderTextColor="#888"
           value={title}
           onChangeText={setTitle}
+          maxLength={120}
           editable={!loading}
         />
         <TextInput
@@ -143,6 +144,7 @@ export default function App() {
           placeholderTextColor="#888"
           value={message}
           onChangeText={setMessage}
+          maxLength={2000}
           editable={!loading}
           multiline
         />

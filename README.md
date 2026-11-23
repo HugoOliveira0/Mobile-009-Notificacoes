@@ -13,7 +13,20 @@ App Expo/React Native para enviar avisos ao Supabase e receber novas inserções
 - Indicador de conexão, carregamento e mensagens de erro.
 - Remoção da assinatura Realtime ao desmontar a tela.
 
-## Preparar o Supabase
+## Executar o projeto pronto
+
+O Supabase desta atividade já está criado e configurado na organização **Holiveira0x**. A tabela `notifications`, o RLS e o Realtime estão ativos. A URL e a chave **publishable pública** ficam em `src/config/supabase.json`; não é necessário criar `.env` para usar este banco.
+
+```bash
+git clone https://github.com/HugoOliveira0/Mobile-009-Notificacoes.git
+cd Mobile-009-Notificacoes
+npm ci
+npm start
+```
+
+Abra o Expo Go no celular e escaneie o QR Code. Use Expo Go compatível com o **SDK 58**. Se a rede local bloquear o acesso ao computador, rode `npm run start:tunnel`.
+
+## Preparar outro Supabase (opcional)
 
 1. Crie ou escolha um projeto dedicado à atividade.
 2. Abra **SQL Editor**, copie o conteúdo de [`supabase/setup.sql`](supabase/setup.sql) e execute.
@@ -21,7 +34,7 @@ App Expo/React Native para enviar avisos ao Supabase e receber novas inserções
 4. Confirme em Publications que a tabela está na publicação `supabase_realtime`.
 5. Em **Project Settings > API** (ou **Connect**), copie a URL do projeto e a chave pública `anon` ou publishable. **Não use a chave `service_role` nem uma chave secreta.**
 
-O SQL reproduz o acesso público de leitura/escrita da aula com RLS habilitado. Qualquer pessoa com a chave pública pode acessar esses avisos. Utilize dados fictícios; em um sistema real, implemente autenticação e políticas por usuário ou perfil.
+O SQL mantém o acesso público aos avisos da aula com RLS habilitado, limitado a **SELECT e INSERT**. Clientes do aplicativo não podem alterar ou apagar registros. O título aceita até 120 caracteres e a mensagem até 2.000; campos em branco são rejeitados também no banco. Utilize dados fictícios; em um sistema real, implemente autenticação e políticas por usuário ou perfil.
 
 ## Executar no celular
 
@@ -31,7 +44,7 @@ Requisitos: Node.js LTS compatível com o SDK Expo do projeto, npm e Expo Go atu
 npm ci
 ```
 
-Copie `.env.example` para `.env` na raiz (no Windows, `copy .env.example .env`; no macOS/Linux, `cp .env.example .env`) e preencha:
+Somente para conectar outro banco, copie `.env.example` para `.env` na raiz (no Windows, `copy .env.example .env`; no macOS/Linux, `cp .env.example .env`) e preencha:
 
 ```dotenv
 EXPO_PUBLIC_SUPABASE_URL=https://SEU_PROJETO.supabase.co
@@ -76,7 +89,7 @@ supabase/setup.sql
 
 O PDF contém um slide de teste que menciona permissões, vibração e push. A implementação e o resumo final da própria aula usam **alertas internos**, sem push, vibração ou execução em segundo plano. Este projeto segue esse código: não é necessário instalar `expo-notifications` nem pedir permissão ao sistema. As funções do helper mantêm os nomes utilizados pelo professor.
 
-A interface e os três arquivos principais seguem a aula. Foram adicionados configuração por `.env`, tratamento de falhas e proteção contra envio duplicado por toque rápido.
+A interface e os três arquivos principais seguem a aula. Foram adicionados configuração pública pronta com sobrescrita opcional por `.env`, tratamento de falhas e proteção contra envio duplicado por toque rápido. As permissões de banco foram limitadas a ler/enviar, pois a atividade não precisa editar/apagar avisos.
 
 ## Verificações locais
 
@@ -87,4 +100,16 @@ npx expo-doctor
 npx expo export --platform android
 ```
 
-O teste completo de envio e recebimento requer a URL/chave pública e a execução do SQL no Supabase, além de dispositivos com o app aberto. A exportação do JavaScript não gera APK.
+A exportação do JavaScript não gera APK. Os alertas nativos devem ser conferidos no Expo Go em um celular; o teste entre clientes descrito abaixo valida o backend e o recebimento pelo SDK.
+
+### Resultado da validação
+
+- Lint e checagem de tipos passaram.
+- Exportação do bundle Android concluída.
+- Um envio real pela chave publishable foi salvo no banco e recebido por dois clientes conectados ao Supabase Realtime, incluindo o remetente.
+- A leitura do registro retornou o título e o conteúdo esperados.
+- O banco rejeitou título em branco e impediu UPDATE e DELETE anônimos.
+- RLS ativo e tabela incluída na publicação `supabase_realtime`.
+- O verificador de segurança do Supabase não apontou alertas.
+
+O teste de integração usa o mesmo SDK e backend do aplicativo. A caixa de alerta nativa ainda requer conferência no Expo Go em um aparelho Android/iOS.

@@ -3,6 +3,7 @@
   "compilerOptions": {
     "allowJs": true,
     "checkJs": true,
+    "resolveJsonModule": true,
     "noEmit": true,
     "strict": false,
     "skipLibCheck": true

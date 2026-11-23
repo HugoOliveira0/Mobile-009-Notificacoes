@@ -1,8 +1,13 @@
 import 'react-native-url-polyfill/auto';
 import { createClient } from '@supabase/supabase-js';
+import classroomConfig from '../config/supabase.json';
 
-const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL?.trim();
-const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY?.trim();
+// Chave publishable: é pública e identifica o app; as permissões vêm do RLS.
+// O projeto da atividade já está configurado. O .env é opcional para outro banco.
+const supabaseUrl =
+  process.env.EXPO_PUBLIC_SUPABASE_URL?.trim() || classroomConfig.url;
+const supabaseKey =
+  process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY?.trim() || classroomConfig.publishableKey;
 
 // Sem configuração, o app abre e informa o que falta, sem tentar se conectar.
 const isConfigured =
