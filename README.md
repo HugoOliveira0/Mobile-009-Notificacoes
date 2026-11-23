@@ -1,6 +1,6 @@
 # MOBILE 009 - Avisos em Tempo Real
 
-Atividade de desenvolvimento mobile de **Hugo Oliveira da Silva - 3º AMS-DS**, baseada no material MOBILE_009, do Prof. Maromo.
+Atividade de desenvolvimento mobile de **Hugo Oliveira da Silva e Eloá Khadijah Silva Amâncio de Souza - 3º AMS-DS**, baseada no material MOBILE_009, do Prof. Maromo.
 
 App Expo/React Native para enviar avisos ao Supabase e receber novas inserções em tempo real, usando `Alert.alert` com o aplicativo aberto.
 
